@@ -33,7 +33,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import it.univaq.ospedali.domain.model.Ospedale
 import it.univaq.ospedali.ui.tools.LifecycleEvent
 
-@SuppressLint("ContextCastToActivity") // significa che vengono ignorate le accotezzze che precdono la conversione di un Context in un Activity
+@SuppressLint("ContextCastToActivity") // significa che vengono ignorate le accortezze che precedono la conversione di un Context in un Activity
 @OptIn(ExperimentalMaterial3Api::class) // il codice sta utilizzando funzionalità sperimentali  della libreria Jetpack Compose Material 3
 @Composable
 fun DetailScreen(
@@ -61,7 +61,7 @@ fun DetailScreen(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                title = { Text(text = "Detail") },
+                title = { Text(text = "Dettagli") },
                 navigationIcon = {
                     IconButton(onClick = {activity.finish()}) {  // quando viene cliccato il pulsante di indietro viene chiusa la schermata di Detail
                         Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, contentDescription = "Back")

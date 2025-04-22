@@ -34,10 +34,10 @@
             android:label="@string/app_name"
             android:theme="@style/Theme.Ospedali">
             <!-- Tag che ci dice che questa è l'activity principale dell'app ed è quella che viene lanciata al momento dell'avvio (LAUNCHER) -->
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <intent-filter>  <!-- funzione essenziale per qualunque app voglia essere avviata da utente -->
+                <action android:name="android.intent.action.MAIN" /> <!-- indica che questa activity è l'activity principale dell'app, quella iniziale -->
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER" /> <!-- indica che questa activity deve essere mostrata nel launcher (la schermata principale dove ci sono le icone delle app -->
             </intent-filter>
         </activity>
         <!-- exported: indica che questa activity è o meno accessibile all'esterno, ovvero l'app si può aprire su quella schermata -->

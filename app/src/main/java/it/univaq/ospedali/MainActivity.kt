@@ -39,8 +39,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent {
-            OspedaliTheme {
+        setContent{
+            OspedaliTheme{
 
                 // tiene memoria del bottone selezionato
                 val navController = rememberNavController()
@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         startDestination = Screen.List // schermata iniziale
                     ){
-                        composable <Screen.List> {
+                        composable <Screen.List> {  // all'interno del composable scriviamo l'elemento da visualizzare
                             ListScreen(  // schermata lista ospedali
                                 modifier = Modifier.fillMaxSize()
                             )
@@ -100,8 +100,8 @@ fun BottomNavigationBar(
     NavigationBar (containerColor = Color(0xFFA0F77A)) {   // ha elementi di tipo NavigationBarItem
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()  // il nav si aggiorna ad ogni cambio di pagina
-        val currentRoute = navBackStackEntry?.destination?.route  // recupera la schermata corrente (se esiste dammi la destinazione e poi la route
-
+        val currentRoute = navBackStackEntry?.destination?.route  // permette di sapere dove si trova l'utente recuperando il nome della schermata dallo stack di navigazione
+        // per stack di navigazione si intende la memoria delle schermate visitate, permette di tornare indietro
         items.forEach {
             NavigationBarItem(
                 selected = currentRoute == it.route.javaClass.canonicalName, // restituisce la stringa package + nome classe + list + map che è uguale alla schermata corrente
@@ -141,7 +141,7 @@ data class BottomNavigationItem(
 
 sealed class  Screen {
 
-    // dato che non ci sono parametri di passaggio tra una schermata ed un'altra usiamo un object
+    // un data object è un singleton che contiene dati; facciamo riferimento ad oggetti di cui esiste una sola istanza
     // permette di convertire l'oggetto in json, fa funzionare il plugin di navigazione
     @Serializable
     data object List: Screen()
