@@ -58,6 +58,7 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         startDestination = Screen.List // schermata iniziale
                     ){
+                        // si definiscono le schermate tra le quali si può navigare
                         composable <Screen.List> {  // all'interno del composable scriviamo l'elemento da visualizzare
                             ListScreen(  // schermata lista ospedali
                                 modifier = Modifier.fillMaxSize()
@@ -85,16 +86,18 @@ fun BottomNavigationBar(
     // definiamo gli elementi
     val items = remember {    // remember ricorda di non aggiornare in continuazione la variabile
         listOf(
+            // bottone per la Lista
             BottomNavigationItem(
                 title = "List",
                 icon = Icons.AutoMirrored.Default.List,  // icona del bottone
                 route = Screen.List  // schermata da passare
-            ),  // bottone per la Lista
+            ),
+            // bottone per la mappa
             BottomNavigationItem(
                 title = "Map",
                 icon = Icons.Default.LocationOn,  // non c'è in automirrored, così usiamo il marker
                 route = Screen.Map  // schermata da passare
-            )  // bottone per la mappa
+            )
         )
     }
     NavigationBar (containerColor = Color(0xFFA0F77A)) {   // ha elementi di tipo NavigationBarItem
@@ -104,16 +107,22 @@ fun BottomNavigationBar(
         // per stack di navigazione si intende la memoria delle schermate visitate, permette di tornare indietro
         items.forEach {
             NavigationBarItem(
-                selected = currentRoute == it.route.javaClass.canonicalName, // restituisce la stringa package + nome classe + list + map che è uguale alla schermata corrente
+                // serve a selezionare il bottone nel momento in cui la schermata corrente prelevata da curretRoute
+                // è uguale alla stringa qualificata ottenuta da it.route (tipo "it.univaq.ospedali.Screen$List")
+                // in parole povere, illumina il bottone della schermata dove ti trovi
+                selected = currentRoute == it.route.javaClass.canonicalName,
                 onClick = {
-                    navController.navigate(it.route) { // passa alla schermata selezionata
-                        popUpTo(navController.graph.startDestinationId) {  // elimina gli altri bottoni
+                    navController.navigate(it.route) { // passa alla schermata indicata da it.route
+                        // serve a cancellare la schermata in cui ti trovavi poco prima di cambiarla
+                        popUpTo(navController.graph.startDestinationId) {
+                            // salva lo stato della schermata da cui si sta uscendo (es. posizione scroll, input utente).
                             saveState = true
                         }
-                        launchSingleTop = true   // non ristanzia la schermata ma prende sempre la stessa
-                        restoreState = true // ripristina lo stato della schermata
+                        launchSingleTop = true   // non ristanzia la schermata (se si preme sul pulsante già abilitato) ma prende sempre la stessa
+                        restoreState = true // ripristina lo stato della schermata, se è stata già aperta una volta
                     }
                 },
+                // icona dei pulsanti, colori e label
                 icon = {
                     Icon(it.icon, contentDescription = it.title)
                 },
@@ -126,23 +135,24 @@ fun BottomNavigationBar(
                     indicatorColor = Color(0xFF000000),
                     unselectedIconColor = Color(0xFF000000),
                     unselectedTextColor = Color(0xFF000000)
-
                 )
             )
         }
     }
 }
 
+// generico oggetto della barra di navigazione (bottone)
 data class BottomNavigationItem(
     val title: String,
     val icon: ImageVector,
     val route: Screen  // al click del bottone si passa ad una nuova schermata
 )
 
+// sealed perchè l'interfaccia può essere implentata da un num. max di classi
 sealed class  Screen {
 
     // un data object è un singleton che contiene dati; facciamo riferimento ad oggetti di cui esiste una sola istanza
-    // permette di convertire l'oggetto in json, fa funzionare il plugin di navigazione
+    // permette di convertire l'oggetto json in un oggetto kotlin
     @Serializable
     data object List: Screen()
 

@@ -9,19 +9,19 @@ import dagger.hilt.android.AndroidEntryPoint
 import it.univaq.ospedali.ui.screen.detail.DetailScreen
 import it.univaq.ospedali.ui.theme.OspedaliTheme
 
-@AndroidEntryPoint
+@AndroidEntryPoint // permette di utilizzare il dependency injection
 class DetailActivity: ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             OspedaliTheme {
+                // recupera i dati passati tramite intent
                 val comune = intent.getStringExtra("comune")
                 val provincia = intent.getStringExtra("provincia")
                 val regione = intent.getStringExtra("regione")
 
-
+                // mostra la schermata di dettaglio con i dati passati
                 DetailScreen(
                     modifier = Modifier,
                     comune = comune,
