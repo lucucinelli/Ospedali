@@ -88,19 +88,19 @@ fun BottomNavigationBar(
         listOf(
             // bottone per la Lista
             BottomNavigationItem(
-                title = "List",
+                title = "Lista",
                 icon = Icons.AutoMirrored.Default.List,  // icona del bottone
                 route = Screen.List  // schermata da passare
             ),
             // bottone per la mappa
             BottomNavigationItem(
-                title = "Map",
+                title = "Mappa",
                 icon = Icons.Default.LocationOn,  // non c'è in automirrored, così usiamo il marker
                 route = Screen.Map  // schermata da passare
             )
         )
     }
-    NavigationBar (containerColor = Color(0xFFA0F77A)) {   // ha elementi di tipo NavigationBarItem
+    NavigationBar (containerColor = Color(0xFFFF6666)) {   // ha elementi di tipo NavigationBarItem
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()  // il nav si aggiorna ad ogni cambio di pagina
         val currentRoute = navBackStackEntry?.destination?.route  // permette di sapere dove si trova l'utente recuperando il nome della schermata dallo stack di navigazione

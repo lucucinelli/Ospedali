@@ -1,5 +1,6 @@
 package it.univaq.ospedali.ui.screen.map
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,9 +8,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -46,13 +49,33 @@ fun MapScreen(
             }
         )
     ){
+        // conversione distanza in km a 2 cifre decimali
+        @SuppressLint("DefaultLocale")
+        fun metriInKmString(metri: Float): String {
+            val km = metri / 1000f
+            return String.format("%.2f km", km)
+        }
+
+        var distance = viewModel.distance
+        var distanceString = metriInKmString(distance)
         var contaOspedali = uiState.filteredOspedali.size;
         Column (modifier = Modifier){
             Text(   text = "Sono stati trovati $contaOspedali ospedali",
+                    textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding( 10.dp)
-                    .fillMaxWidth(),)
+                    modifier = Modifier.padding( 5.dp)
+                    .fillMaxWidth()
+            )
+            Text(   text = "nel raggio di $distanceString",
+                    style = MaterialTheme.typography.bodySmall,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Black,
+                    modifier = Modifier.padding(start = 5.dp, end = 5.dp, top = 2.dp)
+                        .fillMaxWidth()
+
+            )
+
             GoogleMap(
                 modifier = modifier,
                 cameraPositionState = uiState.cameraPositionState  // permette gesture nella mappa

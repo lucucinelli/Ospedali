@@ -3,6 +3,7 @@ package it.univaq.ospedali.ui.screen.map
 import android.content.Context
 import android.location.Location
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -19,6 +20,7 @@ import it.univaq.ospedali.domain.model.Ospedale
 import it.univaq.ospedali.domain.use_case.GetOspedaliUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 data class MapUiState(
     val ospedali: List<Ospedale> = emptyList(),
@@ -45,6 +47,10 @@ class MapViewModel @Inject constructor(
     var uiState by mutableStateOf(MapUiState())
         private set
 
+    // rendo la variabile distance osservabile
+    var distance by mutableFloatStateOf(60000f)
+        private set
+
     private val locationHelper = LocationHelper(context = context){ location ->
 
         val markerState = MarkerState( position = LatLng(location.latitude,location.longitude))
@@ -60,7 +66,7 @@ class MapViewModel @Inject constructor(
             val ospedaleLocation = Location("ospedale")
                 .apply { latitude = it.latitudine
                     longitude = it.longitudine }
-            location.distanceTo(ospedaleLocation) <= 60000
+            location.distanceTo(ospedaleLocation) <= distance
         }
         // aggiorno la mia posizione
         uiState = uiState.copy(
@@ -89,7 +95,7 @@ class MapViewModel @Inject constructor(
 
     private fun getOspedali() {
         viewModelScope.launch {
-            getOspedaliUseCase().collect(){ resurce ->
+            getOspedaliUseCase().collect{ resurce ->
                 uiState = when(resurce){
                     is Resource.Loading -> {
                         uiState.copy(

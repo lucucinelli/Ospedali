@@ -110,6 +110,7 @@ fun OspedaleItem(   // mostro l'ospedale
         Text(
             modifier = Modifier.padding(top = 6.dp, bottom = 0.dp, start = 6.dp, end = 6.dp),
             text = ospedale.id.toString(),
+            fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.headlineMedium
         )
         Text(
