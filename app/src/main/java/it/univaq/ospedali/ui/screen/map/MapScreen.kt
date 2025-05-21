@@ -1,6 +1,5 @@
 package it.univaq.ospedali.ui.screen.map
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -50,15 +48,17 @@ fun MapScreen(
         )
     ){
         // conversione distanza in km a 2 cifre decimali
-        @SuppressLint("DefaultLocale")
         fun metriInKmString(metri: Float): String {
             val km = metri / 1000f
             return String.format("%.2f km", km)
         }
 
-        var distance = viewModel.distance
-        var distanceString = metriInKmString(distance)
-        var contaOspedali = uiState.filteredOspedali.size;
+        // riprendo la variabile dal view model avendola resa osservabile
+        // definisco come val e non var dato che non è variabile
+        val distance = viewModel.distance
+        // converto in metri in km usando la funzione
+        val distanceString = metriInKmString(distance)
+        val contaOspedali = uiState.filteredOspedali.size
         Column (modifier = Modifier){
             Text(   text = "Sono stati trovati $contaOspedali ospedali",
                     textAlign = TextAlign.Center,

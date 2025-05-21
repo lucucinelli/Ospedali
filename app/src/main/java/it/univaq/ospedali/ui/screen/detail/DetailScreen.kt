@@ -114,7 +114,7 @@ fun OspedaleItem(
 ){
     Card(
         modifier = modifier
-            .border(2.dp, Color.Gray, shape = RoundedCornerShape(8.dp)) // crea bordo card
+            .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp)) // crea bordo card
     ) {
         Column(
             modifier = Modifier

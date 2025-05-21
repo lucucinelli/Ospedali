@@ -66,7 +66,7 @@ class MapViewModel @Inject constructor(
             val ospedaleLocation = Location("ospedale")
                 .apply { latitude = it.latitudine
                     longitude = it.longitudine }
-            location.distanceTo(ospedaleLocation) <= distance
+            location.distanceTo(ospedaleLocation) <= distance   // richiamo la variabile
         }
         // aggiorno la mia posizione
         uiState = uiState.copy(
