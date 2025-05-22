@@ -2,9 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET" />   <!-- permesso accesso ad internet -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>  <!-- permesso rilevamento posizione precisa -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/> <!-- permesso rilevamento posizione approssimativa -->
+    <!-- avendo inserito entrambi i permessi mostro all'utente la finestra di dialogo per la scelta del tipo di posizione -->
 
     <application
         android:name = ".Ospedali"
@@ -33,17 +34,19 @@
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Ospedali">
+            <!-- exported: indica che questa activity è o meno accessibile all'esterno, ovvero l'app si può aprire su quella schermata -->
             <!-- Tag che ci dice che questa è l'activity principale dell'app ed è quella che viene lanciata al momento dell'avvio (LAUNCHER) -->
-            <intent-filter>  <!-- funzione essenziale per qualunque app voglia essere avviata da utente -->
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" /> <!-- indica che questa activity è l'activity principale dell'app, quella iniziale -->
 
                 <category android:name="android.intent.category.LAUNCHER" /> <!-- indica che questa activity deve essere mostrata nel launcher (la schermata principale dove ci sono le icone delle app -->
             </intent-filter>
         </activity>
-        <!-- exported: indica che questa activity è o meno accessibile all'esterno, ovvero l'app si può aprire su quella schermata -->
+
         <activity android:name=".DetailActivity"
                   android:exported="false"
             />
+
     </application>
 
 </manifest>

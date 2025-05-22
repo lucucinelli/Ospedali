@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -59,7 +60,8 @@ fun ListScreen(
 
     Column (modifier = modifier) {
         Text(
-            modifier = Modifier.padding( 10.dp)
+            modifier = Modifier
+                .padding(10.dp)
                 .fillMaxWidth(),
             text = "Ospedali italiani",
 
