@@ -47,12 +47,6 @@ fun MapScreen(
             }
         )
     ){
-        // conversione distanza in km a 2 cifre decimali
-        fun metriInKmString(metri: Float): String {
-            val km = metri / 1000f
-            return String.format("%.2f km", km)
-        }
-
         // riprendo la variabile dal view model avendola resa osservabile
         // definisco come val e non var dato che non è variabile
         val distance = viewModel.distance
@@ -113,4 +107,10 @@ fun MapScreen(
     }
 
 
+}
+
+// conversione distanza in km a 2 cifre decimali
+fun metriInKmString(metri: Float): String {
+    val km = metri / 1000f
+    return String.format("%.2f km", km)
 }

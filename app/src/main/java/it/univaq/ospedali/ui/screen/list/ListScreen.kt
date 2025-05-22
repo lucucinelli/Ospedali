@@ -2,6 +2,7 @@ package it.univaq.ospedali.ui.screen.list
 
 import android.content.Intent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -101,8 +102,9 @@ fun OspedaleItem(   // mostro l'ospedale
 ) {
     Column (  // layout verticale
         modifier = modifier
-            .padding(16.dp)
+            .padding(10.dp)
             .clip(RoundedCornerShape(16.dp)) // stonda i bordi
+            .border(1.dp, Color.Gray, RoundedCornerShape(16.dp)) // crea bordo)
             .clickable {    // fa in modo che gli oggetti nella colonna siano cliccabili
                 onItemClick(ospedale)  // su click fa quello specificato nel costruttore
             }
