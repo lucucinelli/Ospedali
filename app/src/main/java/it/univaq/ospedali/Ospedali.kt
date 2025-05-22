@@ -2,9 +2,10 @@ package it.univaq.ospedali
 
 import android.app.Application // classe necessaria per il dependency injection
 import dagger.hilt.android.HiltAndroidApp
-// Questo file serve per inizializzare Hilt in tutta l’applicazione e
-// rappresenta il punto d’ingresso del Dependency Injection Container.
-// funziona a patto che nel manifest ci sia, nel tag application, android:name = ".Ospedali"
+// Questà è la prima classe che viene inizializzata all'avvio e inizializza Hilt in tutta l’app.
+// rappresenta il punto d’ingresso del Dependency Injection che vivrà per tutta la durata dell’app.
+// funziona a patto che nel manifest ci sia il name = ".Ospedali"
+// l'annotazione la si deve usare in una classe che estenda application per far funzionare bene il DI
 @HiltAndroidApp // permette di utilizzare hilt con compose
 class Ospedali:  Application() {
 }

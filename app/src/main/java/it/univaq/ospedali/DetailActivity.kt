@@ -16,7 +16,7 @@ class DetailActivity: ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             OspedaliTheme {
-                // recupera i dati passati tramite intent
+                // recupera i dati passati tramite l'intent che ha startato l'activity
                 val comune = intent.getStringExtra("comune")
                 val provincia = intent.getStringExtra("provincia")
                 val regione = intent.getStringExtra("regione")

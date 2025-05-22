@@ -4,14 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -42,7 +40,7 @@ class MainActivity : ComponentActivity() {
         setContent{
             OspedaliTheme{
 
-                // tiene memoria del bottone selezionato
+                // fa in modo che il navController resti in vita durante la navigazione tra gli screen
                 val navController = rememberNavController()
 
                 Scaffold(
@@ -56,7 +54,7 @@ class MainActivity : ComponentActivity() {
                     NavHost (
                         modifier = Modifier.padding(innerPadding),// aggiunge il padding alla schermata
                         navController = navController,
-                        startDestination = Screen.List // schermata iniziale
+                        startDestination = Screen.List // schermata iniziale avviata all'avvio dell'app
                     ){
                         // si definiscono le schermate tra le quali si può navigare
                         composable <Screen.List> {  // all'interno del composable scriviamo l'elemento da visualizzare
@@ -77,14 +75,13 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// realizziamo la schermata main activity con i bottoni list e map
-
+// realizzo la Botton Bar
 @Composable
 fun BottomNavigationBar(
     navController: NavHostController
 ){
     // definiamo gli elementi
-    val items = remember {    // remember ricorda di non aggiornare in continuazione la variabile
+    val items = remember {    // remember fa in modo che i bottoni vengano "instanziati" una sola volta
         listOf(
             // bottone per la Lista
             BottomNavigationItem(
@@ -102,9 +99,10 @@ fun BottomNavigationBar(
     }
     NavigationBar (containerColor = Color(0xFFFF6666)) {   // ha elementi di tipo NavigationBarItem
 
-        val navBackStackEntry by navController.currentBackStackEntryAsState()  // il nav si aggiorna ad ogni cambio di pagina
-        val currentRoute = navBackStackEntry?.destination?.route  // permette di sapere dove si trova l'utente recuperando il nome della schermata dallo stack di navigazione
-        // per stack di navigazione si intende la memoria delle schermate visitate, permette di tornare indietro
+        // metodo che restituisce l'oggetto rappresentativo dello stato del navController
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentRoute = navBackStackEntry?.destination?.route  // permette di sapere dove si trova l'utente
+        // per stack di navigazione si intende la memoria delle schermate visitate
         items.forEach {
             NavigationBarItem(
                 // serve a selezionare il bottone nel momento in cui la schermata corrente prelevata da curretRoute
