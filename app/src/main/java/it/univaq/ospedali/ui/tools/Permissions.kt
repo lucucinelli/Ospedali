@@ -23,15 +23,19 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 
+// rappresenta permessi generici
+// title e message sono usati nell aUI per il dialog
+// permissions contiene i permessi specifici
 sealed class Permission(
     val title: String,
     val message: String,
     val permissions: List<String>
 )
 
+// rappresenta i permessi di posizione
 class LocationPermission: Permission(
-    title = "Location Permission",
-    message = "This app needs access to your location to show you the closest hospital",
+    title = "Permessi di localizzazione",
+    message = "Questa app ha bisogno di accedere alla tua posizione per mostrarti gli ospedali vicino a te",
     permissions = listOf(
         android.Manifest.permission.ACCESS_COARSE_LOCATION,
         android.Manifest.permission.ACCESS_FINE_LOCATION
@@ -39,46 +43,56 @@ class LocationPermission: Permission(
 
 )
 
+// in base all'evento del ciclo di vita che viene catturato esegue una specifica funzione lambda
 class LifecycleEvent(
     val event: Lifecycle.Event,
     val action: () -> Unit = {}
 )
 
+// funzione composable che gestisce la logica dei permessi ed utilizza codice sperimentale
+// controlla se un permesso è concesso ed esegue il content in caso affermativo
+// altrimenti richiede il permesso o mostra un dialogo
+// gestisce eventi di ciclo di vita
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun PermissionChecker(
     permission: Permission,
     events: List<LifecycleEvent> = emptyList(),
-    content: @Composable () -> Unit = {}
+    content: @Composable () -> Unit = {} // funzione lanciata quando il permesso è concesso
 ){
+
+    // crea un oggetto che tiene traccia dello stato dei permessi che gli vengono passati dalla classe LocalPermission
     val permissionState = rememberMultiplePermissionsState(
         permissions = permission.permissions
     )
     if(permissionState.allPermissionsGranted){
-        content()
+        content()  // esegue la funzione lambda specificata nel costruttore
 
+        // se si verificano nel mentre eventi, per ciascun evento esegui la corrispondente funzione lambda
         events.forEach{
             LifecycleEventEffect(it.event) {
                 it.action()
             }
         }
-    } else {
-        if(permissionState.shouldShowRationale) {
+    } else {  // se i permessi non sono stati concessi
+        if(permissionState.shouldShowRationale) {  // se l'utente ha già negato una volta, allora si ricorre alla rationale
             PermissionDialog(
                 permission = permission,
                 onDismiss = {  },
                 onRequest = { permissionState.launchMultiplePermissionRequest() }
             )
         }
-        else{
-            SideEffect{ // applica i cambiamenti per effetto degli eventi
-                permissionState.launchMultiplePermissionRequest()
+        else{  // se invece è la prima volta che accede all'app o non è necessario mostrare la rationale
+            SideEffect{
+                permissionState.launchMultiplePermissionRequest()  // chiede direttamente i permessi
             }
 
         }
     }
 }
 
+// usa codice sperimentale
+// mostra un dialogo con i permessi specificati
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview(showBackground = true)
@@ -87,6 +101,7 @@ fun PermissionDialog(
     onDismiss: () -> Unit = {},
     onRequest: () -> Unit = {}
 ){
+    // finestra di dialogo per la richiesta dei permessi
     BasicAlertDialog(
         onDismissRequest = onDismiss,
     ){
@@ -111,11 +126,11 @@ fun PermissionDialog(
                 modifier = Modifier.padding(top = 16.dp)
             ){
                 OutlinedButton(onClick = onDismiss) {
-                    Text(text = "Cancel")
+                    Text(text = "Chiudi")  // chiude il dialogo
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 Button(onClick = onRequest ) {
-                    Text(text = "Request")
+                    Text(text = "Richiedi")  // chiede di nuovo i permessi
                 }
             }
         }
