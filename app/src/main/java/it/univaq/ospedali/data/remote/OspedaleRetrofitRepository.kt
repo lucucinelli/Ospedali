@@ -29,7 +29,7 @@ class OspedaleRetrofitRepository @Inject constructor(
     override suspend fun getOspedali(): List<Ospedale> {
 
         // restituisce gli oggetti presi da Internet tramite la funzione downloadData()
-        // ricorda che la funzione downloadData() di ospedaleService( che contiene il GET)
+        // ricorda che la funzione downloadData() di ospedaleService(di Retrofit e contiene il GET)
         // restituisce una lista di remoteospedali e a noi serve una lista di ospedali
         return ospedaleService.downloadData()
             // quindi mappiamo i remoteospedali in ospedali tramite la funzione map()

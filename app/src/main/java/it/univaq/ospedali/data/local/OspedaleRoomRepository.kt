@@ -66,8 +66,8 @@ class OspedaleRoomRepository @Inject constructor(
         regione: String
     ): Flow<List<Ospedale>> {
         return ospedaleDao.getOspedaliByComune(comune, provincia, regione)
-            .map { list ->
-                list.map(LocalOspedale::toModel)
+            .map { list -> // mappa la lista di local ospedali in una lista di ospedali
+                list.map(LocalOspedale::toModel) // mappa ogni local ospedale in un ospedale
             }
     }
 }
