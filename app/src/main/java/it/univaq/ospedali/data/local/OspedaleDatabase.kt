@@ -5,9 +5,11 @@ import androidx.room.RoomDatabase
 import it.univaq.ospedali.data.local.dao.OspedaleDao
 import it.univaq.ospedali.data.local.entity.LocalOspedale
 
-@Database(entities = [LocalOspedale::class], version = 1, exportSchema = false) // definisco il database, l'exportSchema evita l'errore che altrimenti darebbe l'ultima versione
+// funzione che prende in ingresso le entity da trasformare in tabelle del database
+@Database(entities = [LocalOspedale::class], version = 1, exportSchema = false)
 abstract class OspedaleDatabase: RoomDatabase() {
 
-    // noi non sappiamo come implementare un ospedaledao, lo sa room database tramite la configurazione del room databse nel dependency injection
+    // noi non sappiamo come implementare un ospedaledao
+    // lo sa room database che sfrutta il dependency injection
     abstract fun getOspedaleDao(): OspedaleDao
 }

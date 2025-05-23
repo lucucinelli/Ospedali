@@ -21,14 +21,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module // contiene la logica per la creazione delle dipendenze sulla base delle quali si creano oggetti che usano @inject contructor
-@InstallIn(SingletonComponent::class)  // come si comporta il modulo in tutta l'app, in questo caso come singleton
-object RetrofitModule {
+@InstallIn(SingletonComponent::class)  // la logica vale durante tutta la durata dell'app
+object RetrofitModule { // il modulo è un singleton
 
     // generiamo un Client Retrofit
-
     @Provides // serve per il dependency injection
     @Singleton // in questo modo abbiamo un'unica istanza del nostro client
-    // in grado di convertire da stringhe del json a oggetti kotlin
+    // in grado di convertire stringhe del json in oggetti kotlin
     fun retrofitClient(): Retrofit =
         Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -36,22 +35,21 @@ object RetrofitModule {
             .build()
 
     // realizzazione dell'ospedaleservice tramite il dependency injection
-
-
-
     @Provides
     @Singleton
-    // tramite Retrofit ospedaleService effettua delle richieste al server da cui ricava dati per l'app
+    // ospedaleService rappresenta l'interfaccia di Retrofit che
+    // effettua delle richieste al server per ricava dati che tipizza
     fun ospedaleService(retrofit: Retrofit): OspedaleService =
+        // ::class, l'interfaccia viene trasformata in una classe da Retrofit
+        // .java fa in modo che il KClass sia convertito in una classe Java
         retrofit.create(OspedaleService::class.java)
 
 }
 
-// per far coincidere le istanze dell'interfaccia con quelle di retrofit, essendo essa stessa una implementazione dell'altra
-// dobbiamo utilizzare un modulo astratto
 
-@Module
-@InstallIn(SingletonComponent::class)
+@Module // definisce la logica sulla base della quale crea le dipendenze
+@InstallIn(SingletonComponent::class) // fa valere la logica per tutta la durata dell'app
+//
 abstract class RepositoryModule{
 
     // creo una funzione che restituisca un oggetto della classe indicata sulla base della classe OspedaleRetrofitRepository
@@ -62,26 +60,26 @@ abstract class RepositoryModule{
     @Binds // anzichè Provides, dato che la classe è astratta
     @Singleton
     abstract fun localRepository(repository: OspedaleRoomRepository): OspedaleLocalRepository
-
 }
 
-@Module // modulo che permette di inserire le dipendenze
-@InstallIn(SingletonComponent::class) // come si comporta il modulo in tutta l'app, in questo caso come singleton
-object DatabaseModule {
+@Module // logica sulla base della quale si crea il database
+@InstallIn(SingletonComponent::class) // logica valida per tutta la durata dell'app
+object DatabaseModule { // object quindi è singleton
 
-    @Provides
-    @Singleton
+    @Provides // implementa il DI
+    @Singleton // in questo modo abbiamo un'unica istanza del nostro database
     // restituisce un database di tipo ospedaledatabase e Applicationcontext mi permette di ottenere il contesto dell'applicazione
     fun database(@ApplicationContext context: Context): OspedaleDatabase =
         Room.databaseBuilder( // metodo che permette di costruire un database con i seguenti valori in ingresso
             context,
-            OspedaleDatabase::class.java,
+            OspedaleDatabase::class.java,  // classe astratta definita con @Database
             "ospedali_database"   // nome del database da creare in memoria
         )
             .build() // metodo che crea il database
 
-    @Provides
-    @Singleton
+    @Provides // implementa il DI
+    @Singleton // dao singleton
     // restituisce un ospedaledao ricevendo in ingresso il database creato
+    // la creazione la effettua la libreria room insieme a hilt per le dipendenze
     fun ospedaleDao(database: OspedaleDatabase) = database.getOspedaleDao()
 }
