@@ -4,7 +4,7 @@ import it.univaq.ospedali.common.API_DATA
 import it.univaq.ospedali.data.remote.model.RemoteOspedale
 import retrofit2.http.GET
 
-// effettua richieste HTTP e gestisce il risultato
+// effettua richieste HTTP e gestisce il risultato (libreria Retrofit)
 interface OspedaleService {
 
     @GET(API_DATA) // dove API DATA corrisponde al nome del json che vogliamo scaricare

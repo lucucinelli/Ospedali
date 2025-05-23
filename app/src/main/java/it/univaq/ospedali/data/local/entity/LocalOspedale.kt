@@ -4,10 +4,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
-// l'Ospedale che voglio salvare nel mio sistema
-
-@Entity(tableName = "ospedali") // indica che è una classe che rappresenta una tabella nel database
-
+// fa in modo che la dataclass venga "convertita" in una tabella dal nome "ospedali"
+@Entity(tableName = "ospedali")
 data class LocalOspedale (
     @PrimaryKey // indica che è la chiave primaria della tabella
     val id: Int?,
@@ -20,4 +18,4 @@ data class LocalOspedale (
 ){
 }
 
-// ricorda, è preferibile rinominare gli attributi in camelcase con @ColumnInfo(name = "nuovo nome")
+// ricorda, puoi rinominare gli attributi con @ColumnInfo(name = "nuovonome")

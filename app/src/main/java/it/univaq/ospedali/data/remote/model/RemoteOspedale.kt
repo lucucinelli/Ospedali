@@ -1,5 +1,6 @@
 package it.univaq.ospedali.data.remote.model
 
+// data class autogenerata dal plugin JsonToKotlinClass inserendo un generico oggetto JSON
 data class RemoteOspedale(
     val canno_inserimento: String,
     val ccomune: String,
