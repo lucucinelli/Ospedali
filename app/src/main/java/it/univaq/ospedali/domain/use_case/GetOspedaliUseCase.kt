@@ -12,44 +12,47 @@ import javax.inject.Inject
 
 
 class GetOspedaliUseCase @Inject constructor(
-    private val remoteRepo: OspedaleRemoteRepository,
-    private val localRepo: OspedaleLocalRepository
+    private val remoteRepo: OspedaleRemoteRepository, // ottiene così dati da internet tramite Retrofit
+    private val localRepo: OspedaleLocalRepository  // accede ai dati locali tramite Room
 ) {
     // invoke permette di chiamare la classe come se fosse una funzione, in questo caso restituisce un flow di resource ospedale
     operator fun invoke(): Flow<Resource<List<Ospedale>>> {
 
         return flow{
-            emit(Resource.Loading("Loading..."))
+            emit(Resource.Loading("Caricamento..."))
+
 
             // verifichiamo che nel db ci siano i nostri dati
-            // con il catch andiamo a gestire gli errori nel flow
-
+            // con il catch catturiamo errori nel flow, se presenti
+            // restituiamo come flow Resource.error
             localRepo.getAll()
                 .catch{
-                emit(Resource.Error(message = "Error: data not found in local database"))
+                emit(Resource.Error(message = "Errore: dati non trovati nel database locale"))
             }
                 // raccolgo i dati se tutto va a buon fine
                 .collect{ list ->
                     // se la lista di ospedali è vuota vado su internet a recuperare i dati
                     if (list.isEmpty()){
+
                         // Remote request
-                        // stiamo usando retrofit di cui non stiamo gestendo gli errori quindi usiamo il costrutto try catch
-
+                        // stiamo usando retrofit di cui non stiamo gestendo gli errori
+                        // quindi usiamo il costrutto try catch
                         try{
-                            val data = remoteRepo.getOspedali()  // otteniamo i dati
+                            // proviamo a reperire i dati dal datasource remoto
+                            val data = remoteRepo.getOspedali()
 
-                            localRepo.insert(data)  // li inseriamo nel database
-                            emit(Resource.Success(data = data)) // restituiamo i dati
+                            // li inseriamo nel database locale
+                            localRepo.insert(data)
+                            // restituiamo i dati
+                            emit(Resource.Success(data = data))
 
                         } catch (e: HttpException){
                             e.printStackTrace() // stampa l'errore su console
                             emit(Resource.Error(message = "Error from server"))
 
                         }
-
-
                     } else{
-                        // data in db
+                        // altrimenti ci sono già dati nel database locale
                         emit(Resource.Success(data = list))
                     }
 
