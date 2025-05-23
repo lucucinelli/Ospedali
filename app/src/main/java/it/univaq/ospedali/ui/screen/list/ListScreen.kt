@@ -26,16 +26,21 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import it.univaq.ospedali.DetailActivity
 import it.univaq.ospedali.domain.model.Ospedale
 
-@Composable
+
+@Composable  // al momento della creazione della schermata viene creato il corrispondente viewmodel (DI)
 fun ListScreen(
     modifier: Modifier = Modifier,
     viewModel: ListViewModel = hiltViewModel()  // dovendo utilizzare il view model che implementa il dependency injection devo utilizzare il metodo hiltViewModel
 ) {
+
+    // prelevo lo uiState del view model (stato corrente, quindi costante)
     val uiState = viewModel.uiState
 
-    val context = LocalContext.current // uso Compose per creare un contesto locale che muore quando chiudo la schermaat
-    // serve per poter utilizzare il metodo startActivity
+    // definisco il contesto corrente per avviare la detail activity
+    // uso Compose per creare un contesto locale che muore quando chiudo la schermata
+    val context = LocalContext.current
 
+    // prelevo dallo stato il valore dei ssuoi "attributi"
     if(uiState.loadingMsg != null) {
         Box(
             modifier = modifier.fillMaxSize(),
@@ -64,17 +69,15 @@ fun ListScreen(
                 .padding(10.dp)
                 .fillMaxWidth(),
             text = "Ospedali italiani",
-
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold
-
         )
 
-        LazyColumn( // lista ospedali
+        LazyColumn( // lista ospedali restituiti dalla serializzazione
             modifier = Modifier.fillMaxWidth()
         ){
             items(uiState.ospedali.size){ index ->
-
+                // prendo l'ospedale di posizione index nella lista dello uiState
                 val ospedale = uiState.ospedali[index]
                 OspedaleItem(
                     modifier = Modifier.fillMaxWidth(),
@@ -83,7 +86,7 @@ fun ListScreen(
                         // ::class è un oggetto KClass di Kotlin che fa riferimento ad una classe
                         // .java fa in modo che il KClass sia convertito in una classe Java
                         context.startActivity(Intent(context, DetailActivity::class.java)
-                            .also { // altri dati da considerare al passaggio da una schermata all'altra
+                            .also { // passaggio dati dalla schermata corrente a quella di destinazione
                                 it.putExtra("comune", ospedale.comune)
                                 it.putExtra("provincia", ospedale.provincia)
                                 it.putExtra("regione", ospedale.regione)
@@ -95,7 +98,7 @@ fun ListScreen(
     }
 }
 
-
+// funzione composable quindi che non restituisce nulla, crea la grafica
 @Composable
 fun OspedaleItem(   // mostro l'ospedale
     ospedale: Ospedale,

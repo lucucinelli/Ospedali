@@ -12,29 +12,38 @@ import it.univaq.ospedali.domain.use_case.GetOspedaliUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
+// rappresenta lo stato corrente degli oggetti della schermata
 data class ListUiState(   // stati iniziali della schermata List
     val ospedali: List<Ospedale> = emptyList(),
     val loadingMsg: String? = null,
     val error: String? = null
 )
-@HiltViewModel  // dice a Hilt (sistema del dependency injection) che deve creare automatica il view model
+
+
+@HiltViewModel  // serve ad implementare il DI
 class ListViewModel @Inject constructor(
-    private val getOspedaliUseCase: GetOspedaliUseCase // essendo OspedaliUseCase instanziato tramite dependency injection
+    private val getOspedaliUseCase: GetOspedaliUseCase
 ): ViewModel() {
 
-    var uiState by mutableStateOf(ListUiState())  // private set: le variazioni della UI possono essere solamente lette dall'esterno, solo il view model può modificare lo UI state
+
+    // stato osservabile della UI, quando cambia la mappa si aggiorna
+    // mutableStateOf rende osservabile quella variabile da Jetpack Compose
+    // MapUiState è il valore iniziale, quindi lista vuota di ospedali
+    // private set vuol dire che solo da dentro il ViewModel si può modificare uiState, da fuori lo si può solo leggere (es. UI)
+    var uiState by mutableStateOf(ListUiState())
         private set
 
-    // implementiamo l'init del view model, cioè quello che accade quando viene creato la prima volta
-
+    // processo eseguito quando il ViewModel viene creato, cioè ogni volt ache avvio l'app quando mi sposto sul map screen
+    // per tutta l'app viene instanziato una sola volta
+    // quando chiudpo l'app e la riapro riparte l'init
     init {
         downloadOspedali()
     }
 
+    // aggiorna lo uiState in base all'esito dell'operazione di download
     private fun downloadOspedali() {
-        viewModelScope.launch {  // fa parte di androidx.lifecycle e serve a lanciare coroutines quando il view model viene distrutto (es. l'utente cambia la schermata)
-            // codice asincrono che non blocca il thread principale (la UI)
+        viewModelScope.launch {  // fa parte di androidx.lifecycle e serve a lanciare coroutines eseguite fino a quando il view model non viene distrutto (es. l'utente cambia la schermata)
+            // coroutine: codice asincrono che non blocca il thread principale (la UI)
             getOspedaliUseCase().collect { resource ->  // la resource viene presa da collect
                 when (resource) {
                     is Resource.Loading -> {

@@ -37,20 +37,27 @@ import it.univaq.ospedali.domain.model.Ospedale
 @SuppressLint("ContextCastToActivity") // significa che vengono ignorate le accortezze che precedono la conversione di un Context in un Activity
 @OptIn(ExperimentalMaterial3Api::class) // il codice sta utilizzando funzionalità sperimentali  della libreria Jetpack Compose Material 3
 @Composable
-fun DetailScreen(
+fun DetailScreen( // all'appertura della schermata viene creato in automatico il viewModel
     modifier: Modifier,
     viewModel: DetailViewModel = hiltViewModel(),
     comune: String?,
     provincia: String?,
     regione: String?
 ){
-    val activity = LocalContext.current as Activity // .current restituisce un Context che viene convertito in Activity tramite la dicitura as
+    // prende il contesto corrente e lo casta in Activity tramite la dicitura "as"
+    // in questo modo la schermata può usare funzioni aggiuntive (es. il tasto per tornare indietro e chiudere l'activity)
+    // Activity rappresenta la classe base di ogni schermata
+    val activity = LocalContext.current as Activity
 
-    val uiState = viewModel.uiState  // uiState acquisisce dal viewmodel lo stato corrente della UI
+    // uiState acquisisce dal viewmodel lo stato corrente della UI
+    val uiState = viewModel.uiState
 
-    LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {  // quando crea la schermata Detail la prima volta
+    // quando crea la schermata Detail la prima volta
+    LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {
         viewModel.onEvent(    // chiama la funzione onEvent del viewModel
-            DetailEvent.OnOspedaleSelected(   // printa i valori dell'ospedale selezionato
+            // passiamo alla funzione l'evento "ospedale selezionato"
+            // così da aggiornare lo uiState con la lista di ospedali corrispondenti
+            DetailEvent.OnOspedaleSelected(
                 comune = comune,
                 provincia = provincia,
                 regione = regione
@@ -65,7 +72,7 @@ fun DetailScreen(
                 title = { Text(text = "Dettagli") },
                 navigationIcon = {
                     IconButton(onClick = {activity.finish()}) {  // quando viene cliccato il pulsante di indietro viene chiusa la schermata di Detail
-                        Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, contentDescription = "Back")
+                        Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, contentDescription = "Indietro")
                     }
                 }
             )
@@ -81,7 +88,7 @@ fun DetailScreen(
             ){
                 Text(text = "Nessun ospedale trovato")
             }
-            return@Scaffold
+            return@Scaffold  // esce dalla funzione lambda, quindi le parentesi graffe dello scaffold
         }
         LazyColumn (
             modifier = Modifier
@@ -100,7 +107,7 @@ fun DetailScreen(
     }
 }
 
-
+// funzione grafica, generico oggetto della lista di ospedali nella detail screen
 @Composable
 fun OspedaleItem(
     modifier: Modifier = Modifier,

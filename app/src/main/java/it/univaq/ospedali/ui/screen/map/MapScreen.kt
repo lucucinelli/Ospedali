@@ -25,19 +25,22 @@ import it.univaq.ospedali.ui.tools.LocationPermission
 import it.univaq.ospedali.ui.tools.PermissionChecker
 
 
+// quando viene eseguita viene creato automaticamente il ViewModel (DI)
 @Composable
 fun MapScreen(
     modifier: Modifier = Modifier,
-    viewModel: MapViewModel = hiltViewModel()  // dovendo utilizzare il view model che implementa il dependency injection devo utilizzare il metodo hiltViewModel
+    viewModel: MapViewModel = hiltViewModel()
 ){
 
+    // prelevo lo uiState dal viewModel
     val uiState = viewModel.uiState
 
+    // prendo il contesto corrente per poter lanciare successivamente la Detail Activity
     val context = LocalContext.current // serve per il metodo startActivity
 
-    // verifica per i permessi
+    // verifico i permessi
     PermissionChecker(
-        permission = LocationPermission(),
+        permission = LocationPermission(), // classe in tools/permissions
         events = listOf(
             LifecycleEvent(Lifecycle.Event.ON_RESUME){  // app visibile
                 viewModel.onEvent(MapEvent.StartLocation)   // inizia a catturare la posizione
@@ -50,7 +53,8 @@ fun MapScreen(
         // riprendo la variabile dal view model avendola resa osservabile
         // definisco come val e non var dato che non è variabile
         val distance = viewModel.distance
-        // converto in metri in km usando la funzione
+
+        // converto in km usando la funzione
         val distanceString = metriInKmString(distance)
         val contaOspedali = uiState.filteredOspedali.size
         Column (modifier = Modifier){
@@ -70,15 +74,17 @@ fun MapScreen(
 
             )
 
+            // creazione mappa
             GoogleMap(
                 modifier = modifier,
-                cameraPositionState = uiState.cameraPositionState  // permette gesture nella mappa
+                cameraPositionState = uiState.cameraPositionState  // posizione della vista dello uiState
             ){
-                uiState.markerState?.let { // se esise un marker lo aggiungo alla mappa
+                uiState.markerState?.let { // se esise un marker esegui il codice dentro let
+                    // it rappresenta il marker
                     Marker(
-                        state = it,
-                        title = "Current Location",
-                        snippet = "You are here",
+                        state = it, // imposto la posizione del marker
+                        title = "Posizione corrente",
+                        snippet = "Sei qui",   // sottotitolo
                         icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)
                     )
                 }
@@ -86,13 +92,15 @@ fun MapScreen(
                 uiState.filteredOspedali.forEach{ ospedale ->
 
                     Marker(
-                        //serve per specificare la posizione del marker
+                        // remember perchè viene instanziato una sola volta
                         state = rememberMarkerState(position = LatLng(ospedale.latitudine, ospedale.longitudine)),
                         title = ospedale.id.toString(),
                         snippet = "${ospedale.regione}, ${ospedale.provincia}, ${ospedale.comune}",
                         onInfoWindowClick = {
+                            // ::class è un oggetto KClass di Kotlin che fa riferimento ad una classe
+                            // .java fa in modo che il KClass sia convertito in una classe Java
                             context.startActivity(Intent(context, DetailActivity::class.java)
-                                .apply {
+                                .apply {    // passaggio valori dalla MapScreen alla DetailScreen
                                     putExtra("comune", ospedale.comune)
                                     putExtra("provincia", ospedale.provincia)
                                     putExtra("regione", ospedale.regione)
