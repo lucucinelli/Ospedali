@@ -11,6 +11,5 @@ abstract class OspedaleDatabase: RoomDatabase() {
 
     // noi non sappiamo come implementare un ospedaledao
     // lo sa room database che sfrutta il dependency injection
-    //
     abstract fun getOspedaleDao(): OspedaleDao
 }

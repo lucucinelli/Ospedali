@@ -49,7 +49,6 @@ object RetrofitModule { // il modulo è un singleton
 
 @Module // definisce la logica sulla base della quale crea le dipendenze
 @InstallIn(SingletonComponent::class) // fa valere la logica per tutta la durata dell'app
-//
 abstract class RepositoryModule{
 
     // creo una funzione che restituisca un oggetto della classe indicata sulla base della classe OspedaleRetrofitRepository
