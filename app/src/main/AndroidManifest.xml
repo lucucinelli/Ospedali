@@ -37,9 +37,11 @@
             <!-- exported: indica che questa activity è o meno accessibile all'esterno, ovvero l'app si può aprire su quella schermata -->
             <!-- Tag che ci dice che questa è l'activity principale dell'app ed è quella che viene lanciata al momento dell'avvio (LAUNCHER) -->
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" /> <!-- indica che questa activity è l'activity principale dell'app, quella iniziale -->
+                <!-- indica che questa activity è l'activity principale dell'app, quella iniziale -->
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" /> <!-- indica che questa activity deve essere mostrata nel launcher (la schermata principale dove ci sono le icone delle app -->
+                <!-- indica che questa activity deve essere lanciata quando si clicca sull'icona nel launcher -->
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
