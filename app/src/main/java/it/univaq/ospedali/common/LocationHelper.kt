@@ -18,7 +18,7 @@ class LocationHelper (
     // ottengo il location manager che serve per richiedere aggiornamenti di posizione da GPS o rete
     private val manager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager?
 
-    // listener che riceve le nuove posizioni
+    // listener che riceve la nuova posizione
     private val listener = LocationListener { location ->
         onLocationChanged(location) // passa la nuova posizione alla funzione lambda
     }
