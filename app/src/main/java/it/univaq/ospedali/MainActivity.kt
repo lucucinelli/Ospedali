@@ -40,7 +40,8 @@ class MainActivity : ComponentActivity() {
         setContent{
             OspedaliTheme{
 
-                // fa in modo che il navController resti in vita durante la navigazione tra gli screen
+                // fa in modo che il navController venga instanziato una voolta sola
+                // ogni volta che viene aperta l'applicazione
                 val navController = rememberNavController()
 
                 Scaffold(
