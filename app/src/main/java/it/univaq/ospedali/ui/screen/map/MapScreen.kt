@@ -39,13 +39,17 @@ fun MapScreen(
     val context = LocalContext.current // serve per il metodo startActivity
 
     // verifico i permessi
+    // usando la classe enumerativa LifecycleEvent che deriva dalla classe Lifecycle
+    // per classe enumerativa si intende una classe che può assumere solo specifici valori
+    // es. Stagione.Primavera, Stagione.Estate, ecc..
+    // gestisce gli eventi che si verificano durante il ciclo di vita della una componente Android
     PermissionChecker(
         permission = LocationPermission(), // classe in tools/permissions
         events = listOf(
-            LifecycleEvent(Lifecycle.Event.ON_RESUME){  // app visibile
+            LifecycleEvent(Lifecycle.Event.ON_RESUME){  // app visibile (componente interattivo)
                 viewModel.onEvent(MapEvent.StartLocation)   // inizia a catturare la posizione
             },
-            LifecycleEvent(Lifecycle.Event.ON_PAUSE){  // app in background
+            LifecycleEvent(Lifecycle.Event.ON_PAUSE){  // app in background (il componente ha perso il focus)
                 viewModel.onEvent(MapEvent.StopLocation)  // mette in pausa la cattura
             }
         )

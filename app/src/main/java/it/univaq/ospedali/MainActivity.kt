@@ -65,7 +65,6 @@ class MainActivity : ComponentActivity() {
                         composable <Screen.Map> {
                             MapScreen(   // schermata mappa ospedali
                                 modifier = Modifier.fillMaxSize()
-
                             )
                         }
                     }

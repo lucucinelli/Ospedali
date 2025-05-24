@@ -58,10 +58,12 @@ class LifecycleEvent(
 fun PermissionChecker(
     permission: Permission,
     events: List<LifecycleEvent> = emptyList(),
-    content: @Composable () -> Unit = {} // funzione lanciata quando il permesso è concesso
+    content: @Composable () -> Unit = {} // incampsula UI da mostare solo quando il permesso è concesso
 ){
 
     // crea un oggetto che tiene traccia dello stato dei permessi che gli vengono passati dalla classe LocalPermission
+    // l'oggetto viene creato una sola volta durante la fase di inizializzazione della funzione composable
+    // ricreato ogni volta che l'app viene chiusa e successivamente riaperta
     val permissionState = rememberMultiplePermissionsState(
         permissions = permission.permissions
     )
@@ -83,8 +85,8 @@ fun PermissionChecker(
             )
         }
         else{  // se invece è la prima volta che accede all'app o non è necessario mostrare la rationale
-            SideEffect{
-                permissionState.launchMultiplePermissionRequest()  // chiede direttamente i permessi
+            SideEffect{  // è un API di compose, evita che la finestra di dialogo venga mostrata in loop
+                permissionState.launchMultiplePermissionRequest()  // chiede direttamente i permessi tramite finestra di dialogo
             }
 
         }
@@ -98,7 +100,7 @@ fun PermissionChecker(
 @Preview(showBackground = true)
 fun PermissionDialog(
     permission: Permission = LocationPermission(),
-    onDismiss: () -> Unit = {},
+    onDismiss: () -> Unit = {},  // le {} indicano che è una funzione vuota se non gli viene passato nulla
     onRequest: () -> Unit = {}
 ){
     // finestra di dialogo per la richiesta dei permessi

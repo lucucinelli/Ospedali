@@ -44,7 +44,7 @@ class ListViewModel @Inject constructor(
     private fun downloadOspedali() {
         viewModelScope.launch {  // fa parte di androidx.lifecycle e serve a lanciare coroutines eseguite fino a quando il view model non viene distrutto (es. l'utente cambia la schermata)
             // coroutine: codice asincrono che non blocca il thread principale (la UI)
-            getOspedaliUseCase().collect { resource ->  // la resource viene presa da collect
+            getOspedaliUseCase().collect { resource ->  // raccoglie dati dal flow emesso da getOspedaliByComune (equivalente al foreach)
                 when (resource) {
                     is Resource.Loading -> {
                         uiState = uiState.copy(

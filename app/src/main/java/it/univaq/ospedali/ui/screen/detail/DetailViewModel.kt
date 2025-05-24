@@ -49,7 +49,7 @@ class DetailViewModel @Inject constructor(
                         event.regione ?: ""
                         // la lista di ospedali è flow, quindi può essere riscattata solo con metodo collect
                         // dato che la lista è flow può cambiare nel tempo
-                    ).collect {
+                    ).collect {  // raccoglie dati dal flow emesso da getOspedaliByComune (equivalente al foreach)
                         // aggiorna lo stato della UI con la nuova lista di ospedali
                         uiState = uiState.copy(
                             ospedali = it

@@ -48,7 +48,7 @@ class GetOspedaliUseCase @Inject constructor(
 
                         } catch (e: HttpException){
                             e.printStackTrace() // stampa l'errore su console
-                            emit(Resource.Error(message = "Error from server"))
+                            emit(Resource.Error(message = "Errore dal server"))
 
                         }
                     } else{

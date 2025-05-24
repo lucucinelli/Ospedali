@@ -56,7 +56,7 @@ class MapViewModel @Inject constructor(
     var distance by mutableFloatStateOf(60000f)
         private set
 
-    // definisco il locationHelper che quando arriva una nuova posizione
+    // definisco il locationHelper (sando il file in common) che quando arriva una nuova posizione
     private val locationHelper = LocationHelper(context = context){ location ->
 
         // crea un marker nella posizione attuale
@@ -68,18 +68,29 @@ class MapViewModel @Inject constructor(
             // centra la vista sulla posizione attuale dell'utente
             LatLng(location.latitude, location.longitude),
             13f,
-            0f,
-            0f
+            0f,  // inclinazione
+            0f  // rotazione
         )
 
         // filtra gli ospedali secondo la distanza specificata
-        val filteredOspedali = uiState.ospedali.filter {
+        val filteredOspedali = uiState.ospedali.filter { ospedale -> // filter è una funzione lambda che esamina ogni elemento nella lista
             val ospedaleLocation = Location("ospedale")  // creo un oggetto Location di Android, cioè una posizione geografica
-                .apply { latitude = it.latitudine   // recupero langitudine e latitudine dell'oggetto iesimo
-                    longitude = it.longitudine }
-            // distanceTo calcola la differenza in metri tra la posizione attuale dell'utente e quella dell'ospedale iesimo
+                .apply { latitude = ospedale.latitudine   // gli imposto la long. e lat. dell'oggetto iesimo della lista
+                    longitude = ospedale.longitudine }
+            // distanceTo calcola la differenza in metri tra
+            // la location restituita dal location helper
+            // e quella dell'ospedale iesimo preso dalla lista nello uiState
             location.distanceTo(ospedaleLocation) <= distance   // se la condizione è verificata l'ospedale viene incluso nella lista
         }
+
+
+        // N.B. Location("ospedale"): la classe Location crea un oggetto posizione appoggiandosi ad un provider che viene specificato come stringa nel costruttore
+        // dato che in questo caso non abbiamo bisogno di un provider reale (es. GPS, Network, ecc...) ma vogliamo solo usare l'oggetto location per fare calcoli
+        // gli forniamo in ingresso una stringa qualunque che non sia null (ospedale)
+
+        // apply, invece, è una lambda che ritorna un oggetto (in questo caso location)
+        // e ne permette l'inizializzazione (lat. = ..., long. = ....)
+
 
         // aggiorno la mia posizione
         uiState = uiState.copy(
@@ -116,7 +127,7 @@ class MapViewModel @Inject constructor(
         // e la coroutine viene eseguita finchè il ViewModel è attivo (fino a chisura schermata)
         // la coroutine è codice eseguibile in parallelo all'app, non causa il bloccaggio
         viewModelScope.launch {
-            getOspedaliUseCase().collect{ resurce ->  // restituisce uno stream di dati
+            getOspedaliUseCase().collect{ resurce ->  // raccoglie dati dal flow emesso da getOspedaliByComune (equivalente al foreach)
                 // in base all'esito dello useCase aggiorno lo uiState
                 uiState = when(resurce){
                     is Resource.Loading -> {
