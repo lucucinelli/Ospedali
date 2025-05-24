@@ -53,10 +53,11 @@ fun DetailScreen( // all'appertura della schermata viene creato in automatico il
     val uiState = viewModel.uiState
 
     // quando crea la schermata Detail la prima volta
+    // chiama la funzione onEvent del viewModel
+    // passiamo alla funzione l'evento "ospedale selezionato"
+    // così da aggiornare lo uiState con la lista di ospedali corrispondenti
     LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {
-        viewModel.onEvent(    // chiama la funzione onEvent del viewModel
-            // passiamo alla funzione l'evento "ospedale selezionato"
-            // così da aggiornare lo uiState con la lista di ospedali corrispondenti
+        viewModel.onEvent(
             DetailEvent.OnOspedaleSelected(
                 comune = comune,
                 provincia = provincia,
@@ -88,7 +89,7 @@ fun DetailScreen( // all'appertura della schermata viene creato in automatico il
             ){
                 Text(text = "Nessun ospedale trovato")
             }
-            return@Scaffold  // esce dalla funzione lambda, quindi le parentesi graffe dello scaffold
+            return@Scaffold  // esce dalla funzione lambda, cioè salta alla parentesi } di chiusura dello Scaffold
         }
         LazyColumn (
             modifier = Modifier

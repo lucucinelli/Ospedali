@@ -7,7 +7,6 @@ import it.univaq.ospedali.data.local.entity.LocalOspedale
 import kotlinx.coroutines.flow.Flow
 
 @Dao // metodi che servono per salvare, aggiornare, cancellare e cercare gli ospedali nel database
-
 interface OspedaleDao {
 
     @Upsert // metodo che permette di inserire o, se presente, aggiornare un ospedale nel database

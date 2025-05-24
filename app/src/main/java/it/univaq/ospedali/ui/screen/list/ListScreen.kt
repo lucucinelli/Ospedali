@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -108,6 +110,7 @@ fun OspedaleItem(   // mostro l'ospedale
     Column (  // layout verticale
         modifier = modifier
             .padding(10.dp)
+            .height(120.dp)
             .clip(RoundedCornerShape(16.dp)) // stonda i bordi
             .border(1.dp, Color.Gray, RoundedCornerShape(16.dp)) // crea bordo)
             .clickable {    // fa in modo che gli oggetti nella colonna siano cliccabili

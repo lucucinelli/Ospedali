@@ -27,6 +27,7 @@ class GetOspedaliUseCase @Inject constructor(
             // restituiamo come flow Resource.error
             localRepo.getAll()
                 .catch{
+                    // non restituisce nulla, fa in modo che i dati possano essere raccolti dal collect del view model
                 emit(Resource.Error(message = "Errore: dati non trovati nel database locale"))
             }
                 // raccolgo i dati se tutto va a buon fine
@@ -45,6 +46,7 @@ class GetOspedaliUseCase @Inject constructor(
                             localRepo.insert(data)
                             // restituiamo i dati
                             emit(Resource.Success(data = data))
+                        // non restituisce nulla, fa in modo che i dati possano essere raccolti dal collect del view model
 
                         } catch (e: HttpException){
                             e.printStackTrace() // stampa l'errore su console
@@ -54,6 +56,7 @@ class GetOspedaliUseCase @Inject constructor(
                     } else{
                         // altrimenti ci sono già dati nel database locale
                         emit(Resource.Success(data = list))
+                    // non restituisce nulla, fa in modo che i dati possano essere raccolti dal collect del view model
                     }
 
                 }
