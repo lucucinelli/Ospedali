@@ -7,13 +7,13 @@ plugins {
     alias(libs.plugins.kotlin.compose) apply false  // per abilitare Jetpack Compose
 
     /* Plugin KSP */
-    alias(libs.plugins.google.devtools.ksp) apply false // permette di utilizzare ksp che offre annotazione comode per librerie come Room (es. @Dao, @Query..)
+    alias(libs.plugins.google.devtools.ksp) apply false // permette di utilizzare ksp così da leggere annotazioni compile time (es. @Dao, @Query..) ed eseguirle
 
     /* Plugin Hilt */
     alias(libs.plugins.dagger.hilt.android) apply false // permette di utilizzare hilt (dependency injection)
 
     /* Plugin Serialization */
-    alias(libs.plugins.jetbrains.serialization) apply false // permette la serializzazione Ktolin (da file JSON)
+    alias(libs.plugins.jetbrains.serialization) apply false // corrisponde al plugin kotlinx-serialization, abilita @Serializable (da file JSON in Kotlin)
 }
 
 buildscript{  // permette di definire tutti gli strumenti da passare al Gradle per la creazione dell'app

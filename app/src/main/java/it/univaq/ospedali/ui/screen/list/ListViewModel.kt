@@ -33,7 +33,7 @@ class ListViewModel @Inject constructor(
     var uiState by mutableStateOf(ListUiState())
         private set
 
-    // processo eseguito quando il ViewModel viene creato, cioè ogni volt ache avvio l'app quando mi sposto sul map screen
+    // processo eseguito quando il ViewModel viene creato, cioè ogni volta che avvio l'app quando mi sposto sul map screen
     // per tutta l'app viene instanziato una sola volta
     // quando chiudpo l'app e la riapro riparte l'init
     init {

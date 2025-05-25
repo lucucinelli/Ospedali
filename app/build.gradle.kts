@@ -14,7 +14,7 @@ plugins {
     alias(libs.plugins.jetbrains.serialization) // permette la serializzazione Kotlin da JSON
 
     /* Secrets Alias plugin */
-    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")  // serve a gestire segreti (come le chiavi API)
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")  // fa in modo che la API Key possa essere scritta in un file locale (local properties) piuttosto che pubblico
 }
 
 android {

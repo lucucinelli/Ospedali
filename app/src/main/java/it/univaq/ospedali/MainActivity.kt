@@ -111,12 +111,11 @@ fun BottomNavigationBar(
                 selected = currentRoute == it.route.javaClass.canonicalName,
                 onClick = {
                     navController.navigate(it.route) { // passa alla schermata indicata da it.route
-                        // serve a cancellare la schermata in cui ti trovavi poco prima di cambiarla
+                        // Rimuovi dalla back stack tutte le schermate sopra quella iniziale (startDestination), salvandone lo stato.
                         popUpTo(navController.graph.startDestinationId) {
-                            // salva lo stato della schermata da cui si sta uscendo (es. posizione scroll, input utente).
                             saveState = true
                         }
-                        launchSingleTop = true   // non ristanzia la schermata (se si preme sul pulsante già abilitato) ma prende sempre la stessa
+                        launchSingleTop = true   // Se la schermata che serve è già in cima alla pila back stack, non ne crei una nuova
                         restoreState = true // ripristina lo stato della schermata, se è stata già aperta una volta
                     }
                 },
@@ -149,7 +148,7 @@ data class BottomNavigationItem(
 // sealed perchè l'interfaccia può essere implentata da un num. max di classi
 sealed class  Screen {
 
-    // un data object è un singleton che contiene dati; facciamo riferimento ad oggetti di cui esiste una sola istanza
+    // un data object è una data class ma con un solo oggetto singleton che contiene dati
     // permette di convertire l'oggetto json in un oggetto kotlin
     @Serializable
     data object List: Screen()
@@ -157,3 +156,9 @@ sealed class  Screen {
     @Serializable
     data object Map: Screen()
 }
+
+
+// Il back stack è la cronologia delle schermate aperte dall'utente, organizzata come una pila (stack):
+//Ogni volta che navighi verso una nuova schermata, questa viene aggiunta in cima al back stack.
+//Quando premi “indietro”, la schermata corrente viene rimossa (pop) e si torna a quella precedente.
+//Così puoi “scorrere all'indietro” nella cronologia delle schermate viste, proprio come nella cronologia di un browser.
