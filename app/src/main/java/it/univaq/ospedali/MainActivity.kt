@@ -115,7 +115,7 @@ fun BottomNavigationBar(
                         popUpTo(navController.graph.startDestinationId) {
                             saveState = true
                         }
-                        launchSingleTop = true   // Se la schermata che serve è già in cima alla pila back stack, non ne crei una nuova
+                        launchSingleTop = true   // Se la schermata che serve è già in cima alla pila nav back stack, non ne crea una nuova /(evita duplicati in caso di doppio click sullo stesso bottone)
                         restoreState = true // ripristina lo stato della schermata, se è stata già aperta una volta
                     }
                 },
@@ -158,7 +158,8 @@ sealed class  Screen {
 }
 
 
-// Il back stack è la cronologia delle schermate aperte dall'utente, organizzata come una pila (stack):
-//Ogni volta che navighi verso una nuova schermata, questa viene aggiunta in cima al back stack.
-//Quando premi “indietro”, la schermata corrente viene rimossa (pop) e si torna a quella precedente.
-//Così puoi “scorrere all'indietro” nella cronologia delle schermate viste, proprio come nella cronologia di un browser.
+// Il nav back stack è la cronologia delle schermate aperte dall'utente, organizzata come una pila (stack):
+// Ogni volta che navighi verso una nuova schermata, questa viene aggiunta in cima al back stack.
+// Quando premi “indietro”, la schermata corrente viene rimossa (pop) e si torna a quella precedente.
+// Così puoi “scorrere all'indietro” nella cronologia delle schermate viste, proprio come nella cronologia di un browser.
+// la schermata corrente dell'utente è quella in cima alla pila
