@@ -56,7 +56,7 @@ fun MapScreen(
     ){
         // riprendo la variabile dal view model avendola resa osservabile
         // definisco come val e non var dato che non è variabile
-        val distance = viewModel.distance
+        val distance = uiState.distance
 
         // converto in km usando la funzione
         val distanceString = metriInKmString(distance)

@@ -28,6 +28,7 @@ data class MapUiState(
     val error: String? = null,
     val markerState: MarkerState? = null,  // marker della posizione corrente
     val filteredOspedali: List<Ospedale> = emptyList(),
+    val distance: Float = 60000f,
     val cameraPositionState: CameraPositionState = CameraPositionState(
         position = CameraPosition( LatLng(0.0, 0.0), 10f, 0f, 0f))
 )   // dove la mappa è centrata
@@ -51,10 +52,6 @@ class MapViewModel @Inject constructor(
     // private set vuol dire che solo da dentro il ViewModel si può modificare uiState, da fuori lo si può solo leggere (es. UI)
     var uiState by mutableStateOf(MapUiState())
         private set  // implementa lo UDF
-
-    // rendo la variabile distance osservabile
-    var distance by mutableFloatStateOf(60000f)
-        private set
 
     // definisco il locationHelper (sando il file in common) che quando arriva una nuova posizione
     private val locationHelper = LocationHelper(context = context){ location ->
@@ -80,7 +77,7 @@ class MapViewModel @Inject constructor(
             // distanceTo calcola la differenza in metri tra
             // la location restituita dal location helper
             // e quella dell'ospedale iesimo preso dalla lista nello uiState
-            location.distanceTo(ospedaleLocation) <= distance   // se la condizione è verificata l'ospedale viene incluso nella lista
+            location.distanceTo(ospedaleLocation) <= uiState.distance   // se la condizione è verificata l'ospedale viene incluso nella lista
         }
 
 
