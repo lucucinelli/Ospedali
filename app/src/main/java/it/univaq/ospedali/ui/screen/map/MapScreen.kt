@@ -40,9 +40,9 @@ fun MapScreen(
 
     // verifico i permessi
     // usando la classe enumerativa LifecycleEvent che deriva dalla classe Lifecycle
-    // per classe enumerativa si intende una classe che può assumere solo specifici valori
+    // per classe enumerativa si intende una classe che può assumere solo specifici valori (es. ON_CREATE, ecc...)
     // es. Stagione.Primavera, Stagione.Estate, ecc..
-    // gestisce gli eventi che si verificano durante il ciclo di vita della una componente Android
+    // gestisce gli eventi che si verificano durante il ciclo di vita della una componente Android (in questo caso il map screen)
     PermissionChecker(
         permission = LocationPermission(), // classe in tools/permissions
         events = listOf(
