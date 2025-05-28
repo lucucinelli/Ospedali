@@ -19,7 +19,7 @@ data class DetailUiState(
 // classe che definisce tutti i possibili eventi
 sealed class DetailEvent{
     // selezione di un ospedale
-    data class OnOspedaleSelected( val comune: String?, val provincia: String?, val regione: String?): DetailEvent()
+    data class OnOspedaleSelected(val comune: String?, val provincia: String?, val regione: String?): DetailEvent()
 }
 
 @HiltViewModel // dice a Hilt (sistema del dependency injection) che deve creare automatica il view model
